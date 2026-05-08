@@ -49,35 +49,35 @@ def make_material(color, diffuse, specular, shininess, reflectivity):
     }
 
 
-red_material = make_material(make_vec(0.95, 0.25, 0.20), 0.85, 0.15, 20, 0.10)
-blue_material = make_material(make_vec(0.20, 0.35, 0.95), 0.85, 0.20, 25, 0.15)
-green_material = make_material(make_vec(0.25, 0.80, 0.35), 0.85, 0.10, 15, 0.05)
-gray_material = make_material(make_vec(0.75, 0.75, 0.78), 0.70, 0.20, 30, 0.25)
-floor_material = make_material(make_vec(0.80, 0.80, 0.75), 0.75, 0.05, 8, 0.05)
+red_material = make_material(make_vec(.95, .25, .20), .85, .15, 20, .10)
+blue_material = make_material(make_vec(.20, .35, .95), .85, .20, 25, .15)
+green_material = make_material(make_vec(.25, .80, .35), .85, .10, 15, .05)
+gray_material = make_material(make_vec(.75, .75, .78), .70, .20, 30, .25)
+floor_material = make_material(make_vec(.80, .80, .75), .75, .05, 8, .05)
 
 objects = [
     {
         "kind": "sphere",
-        "center": make_vec(-1.2, 0.0, -1.5),
-        "radius": 0.75,
+        "center": make_vec(-1.2, .0, -1.5),
+        "radius": .75,
         "material": red_material
     },
     {
         "kind": "sphere",
-        "center": make_vec(0.35, -0.1, -2.2),
-        "radius": 0.90,
+        "center": make_vec(.35, -.1, -2.2),
+        "radius": .90,
         "material": gray_material
     },
     {
         "kind": "sphere",
-        "center": make_vec(1.55, -0.25, -1.2),
-        "radius": 0.60,
+        "center": make_vec(1.55, -.25, -1.2),
+        "radius": .60,
         "material": blue_material
     },
     {
         "kind": "sphere",
-        "center": make_vec(0.9, -0.55, 0.20),
-        "radius": 0.35,
+        "center": make_vec(.9, -.55, .20),
+        "radius": .35,
         "material": green_material
     },
     {
@@ -88,12 +88,12 @@ objects = [
     }
 ]
 
-light_position = make_vec(2.5, 4.5, 0.5)
+light_position = make_vec(2.5, 4.5, .5)
 light_color = make_vec(1, 1, 1)
 
 camera_position = make_vec(0, 1.1, 4.5)
-camera_yaw = 0.0
-camera_pitch = -0.12
+camera_yaw = .0
+camera_pitch = -.12
 
 
 
@@ -120,9 +120,9 @@ def hit_sphere(obj, ray_start, ray_dir):
 
     t = None
 
-    if t1 > 0.001:
+    if t1 > .001:
         t = t1
-    elif t2 > 0.001:
+    elif t2 > .001:
         t = t2
 
     if t is None:
@@ -145,12 +145,12 @@ def hit_plane(obj, ray_start, ray_dir):
 
     denominator = np.dot(plane_normal, ray_dir)
 
-    if abs(denominator) < 0.0001:
+    if abs(denominator) < .0001:
         return None
 
     t = np.dot(plane_point - ray_start, plane_normal) / denominator
 
-    if t <= 0.001:
+    if t <= .001:
         return None
 
     hit_point = ray_start + t * ray_dir
@@ -159,9 +159,9 @@ def hit_plane(obj, ray_start, ray_dir):
     checker = (math.floor(hit_point[0]) + math.floor(hit_point[2])) % 2
 
     if checker == 0:
-        material["color"] = make_vec(0.80, 0.80, 0.75)
+        material["color"] = make_vec(.80, .80, .75)
     else:
-        material["color"] = make_vec(0.25, 0.25, 0.27)
+        material["color"] = make_vec(.25, .25, .27)
 
     return {
         "t": t,
@@ -229,7 +229,7 @@ def is_in_shadow(point, normal):
     direction_to_light = normalize(direction_to_light)
 
 
-    shadow_start = point + normal * 0.001
+    shadow_start = point + normal * .001
 
     shadow_hit = find_closest_hit(shadow_start, direction_to_light)
 
@@ -241,9 +241,9 @@ def is_in_shadow(point, normal):
 
 def background_color(ray_dir):
 
-    t = 0.5 * (ray_dir[1] + 1)
-    bottom_color = make_vec(0.04, 0.05, 0.08)
-    top_color = make_vec(0.45, 0.65, 0.95)
+    t = .5 * (ray_dir[1] + 1)
+    bottom_color = make_vec(.04, .05, .08)
+    top_color = make_vec(.45, .65, .95)
     return bottom_color * (1 - t) + top_color * t
 
 
@@ -260,7 +260,7 @@ def trace_ray(ray_start, ray_dir, depth):
     base_color = material["color"]
 
 
-    final_color = base_color * 0.10
+    final_color = base_color * .10
 
     if not is_in_shadow(point, normal):
         direction_to_light = normalize(light_position - point)
@@ -280,7 +280,7 @@ def trace_ray(ray_start, ray_dir, depth):
 
     if depth > 0 and material["reflectivity"] > 0:
         reflected_dir = reflect(ray_dir, normal)
-        reflected_start = point + normal * 0.001
+        reflected_start = point + normal * .001
         reflected_color = trace_ray(reflected_start, reflected_dir, depth - 1)
 
         reflectivity = material["reflectivity"]
@@ -308,8 +308,8 @@ def render_scene(screen, font):
  
             for sample_y in range(sample_grid):
                 for sample_x in range(sample_grid):
-                    offset_x = (sample_x + 0.5) / sample_grid
-                    offset_y = (sample_y + 0.5) / sample_grid
+                    offset_x = (sample_x + .5) / sample_grid
+                    offset_y = (sample_y + .5) / sample_grid
 
                     ray_x = x + offset_x
                     ray_y = y + offset_y
@@ -364,9 +364,9 @@ def handle_key(key):
 
     forward, right, up = get_camera_vectors()
 
-    move_amount = .4
-    turn_amount = 0.08
-    light_amount = 0.40
+    move_amount = 1
+    turn_amount = .08
+    light_amount = 1
 
     if key == pygame.K_ESCAPE:
         pygame.quit()
